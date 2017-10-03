@@ -6,14 +6,13 @@ class Trivia extends React.Component {
 			ContaPregunta: 0,
 			rptaSeleccionada: [],
 			correctas: 0,
-			trivial: props.preguntas,
-			terminado: false
+			trivial: props.preguntas
 		};
 	}
 	Alternativas(alternativas) {
 		return alternativas.map((value, index) => {
 			return (
-				<div>
+				<div className="btnRespuestas">
 					<button className='btn btn-lg' key={index} onClick={(e) => this.SiguienteFormulario(e)}>{value}</button>
 				</div>
 			);
@@ -22,48 +21,69 @@ class Trivia extends React.Component {
 	SiguienteFormulario(e) {
 		this.setState({
 			rptaSeleccionada: this.state.rptaSeleccionada.concat([e.target.textContent]),
-			ContaPregunta: this.state.ContaPregunta + 1,
-			terminado: true
+			ContaPregunta: this.state.ContaPregunta + 1
 		})
 		if (this.state.trivial[this.state.ContaPregunta].respuestaCorrecta == e.target.textContent) {
-			console.log("rptacorerer", this.state.trivial[this.state.ContaPregunta].respuestaCorrecta);
 			this.setState({
 				correctas: this.state.correctas + 1
 			})
 		}
-		console.log(this.state.rptaSeleccionada);
-		console.log(this.state.correctas);
 	}
-
+	MuestraRespuestas() {
+		return (
+			<div>
+				<div className="respuestasEchas">
+					{
+						this.state.rptaSeleccionada.map((e, i) => {
+							if (e == this.state.trivial[i].respuestaCorrecta) {
+								return <p className="correcto">{i + 1}. {this.state.trivial[i].preguntas}<strong>{e}</strong></p>
+							} else {
+								return <p className="incorrecto">{i + 1}. {this.state.trivial[i].preguntas}<strong><strike>{e}</strike> {this.state.trivial[i].respuestaCorrecta}</strong></p>
+							}
+						})
+					}
+				</div>
+				<div className="btnSubmit">
+					<button className="btn btn-sm" onClick={() => this.Reiniciar()}>Submit</button>
+				</div>
+			</div>
+		)
+	}
+	Reiniciar() {
+		this.setState({
+			ContaPregunta: 0,
+			rptaSeleccionada: [],
+			correctas: 0,
+		});
+	}
 	render() {
 		return (
 			<div className="container-fluid">
 				<div className="row">
-					<div className="col-xs-12 col-md-12 Preguntas" id="Cuestionario1">
-						<div>
+					<div className="col-xs-12 col-md-12 Preguntas">
+						<div >
 							{this.state.ContaPregunta !== this.state.trivial.length && <img src={this.state.trivial[this.state.ContaPregunta].imagen} />}
 							{this.state.ContaPregunta === this.state.trivial.length && <img src="img/camion.jpg" />}
 						</div>
 						<div className="progress">
-							<div className="progress-bar" role="progressbar" aria-ValueNow="70" aria-ValueMin="0" aria-ValueMax="100">
-								<span className="sr-only">25% Complete</span>
+							<div className="progress-bar" role="progressbar" aria-ValueNow="70" aria-ValueMin="0" aria-ValueMax="100" style={{ width: this.state.rptaSeleccionada.length * 20 + '%', height: '20px' }}>
 							</div>
 						</div>
-						<div className="cajaPregunta" id="cajadePreguntas">
+						<div className="cajaPregunta">
 							<div>
 								{this.state.ContaPregunta !== this.state.trivial.length && <h3>{this.state.trivial[this.state.ContaPregunta].preguntas}</h3>}
-								{this.state.ContaPregunta === this.state.trivial.length && <h3>Here</h3>}
+								{this.state.ContaPregunta === this.state.trivial.length && <h3>Here are you answer:</h3>}
 							</div>
-							<div id="botonesRespuestas" className="btnRespuestas">
+							<div className="btnRespuestas">
 								<div>
 									{this.state.ContaPregunta !== this.state.trivial.length && this.Alternativas(this.state.trivial[this.state.ContaPregunta].alternativas)}
-									{this.state.ContaPregunta === this.state.trivial.length && <h3>Here</h3>}
+									{this.state.ContaPregunta === this.state.trivial.length && this.MuestraRespuestas()}
 								</div>
 							</div>
 							<div className="redes">
-								<i className="fa fa-twitter-square fa-2x" aria-Hidden="true"></i>
-								<i className="fa fa-facebook-square fa-2x" aria-Hidden="true"></i>
-								<i className="fa fa-linkedin-square fa-2x" aria-Hidden="true"></i>
+								<span className="social social-facebook"></span>
+								<span className="social social-linked-in"></span>
+								<span className="social social-twitter"></span>
 							</div>
 						</div>
 					</div>
