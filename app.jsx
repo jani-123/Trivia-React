@@ -72,7 +72,7 @@ class Trivia extends React.Component {
 						<div className="cajaPregunta">
 							<div>
 								{this.state.ContaPregunta !== this.state.trivial.length && <h3>{this.state.trivial[this.state.ContaPregunta].preguntas}</h3>}
-								{this.state.ContaPregunta === this.state.trivial.length && <h3>Here are you answer:</h3>}
+								{this.state.ContaPregunta === this.state.trivial.length && <h3>{this.state.correctas} out of {this.state.trivial.length} correct</h3>}
 							</div>
 							<div className="btnRespuestas">
 								<div>
